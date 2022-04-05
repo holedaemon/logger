@@ -20,7 +20,7 @@ class Log(commands.Cog):
     async def log(self,
                   ctx: commands.Context,
                   ch: discord.TextChannel,
-                  after: discord.Message = None,
+                  before: discord.Message = None,
                   dry: bool = False,
                   limit: int = None):
         await ctx.send("Logging...")
@@ -40,7 +40,7 @@ class Log(commands.Cog):
                 log.error(e)
                 return
 
-            async for msg in ch.history(limit=limit, after=after):
+            async for msg in ch.history(limit=limit, before=before):
                 log.info(f"writing {msg.id} to database")
                 content = utils.remove_markdown(msg.clean_content)
                 cur.execute("INSERT INTO messages (sf, content) VALUES (?, ?);", (msg.id, content))
